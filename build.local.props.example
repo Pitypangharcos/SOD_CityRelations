@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <!-- BepInEx IL2CPP core folder containing BepInEx.Core.dll, BepInEx.Unity.IL2CPP.dll, and 0Harmony.dll. -->
+    <BepInExCorePath>C:\Path\To\BepInEx\core\</BepInExCorePath>
+
+    <!-- Generated IL2CPP interop folder containing Il2CppInterop.Runtime.dll and generated game assemblies. -->
+    <Il2CppInteropAssembliesPath>C:\Path\To\BepInEx\interop\</Il2CppInteropAssembliesPath>
+
+    <!-- Optional: Shadows of Doubt managed/game assembly folder if available for inspection. -->
+    <GameManagedPath>C:\Path\To\Shadows of Doubt\Shadows of Doubt_Data\Managed\</GameManagedPath>
+
+    <!-- Optional: r2modman/Thunderstore profile folder containing BepInEx, config, plugins, and interop output. -->
+    <ThunderstoreProfilePath>C:\Path\To\ThunderstoreModManager\DataFolder\ShadowsOfDoubt\profiles\ProfileName\</ThunderstoreProfilePath>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Optional developer-local path overrides.
+    Copy build.local.props.example to build.local.props and edit it for your machine.
+    build.local.props is intentionally ignored by git.
+  -->
+  <Import Project="build.local.props" Condition="Exists('build.local.props')" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>SOD_CityRelations</AssemblyName>
+    <RootNamespace>SOD_CityRelations</RootNamespace>
+    <LangVersion>latest</LangVersion>
+
+    <!--
+      Backend-only build:
+      - Default mode.
+      - Does not require BepInEx, Unity, Shadows of Doubt, or generated IL2CPP interop assemblies.
+      - Builds the relationship backend, JSON persistence, public API, and developer harness.
+
+      Game-integrated build:
+      - Pass -p:EnableBepInExIntegration=true.
+      - Requires BepInEx IL2CPP core references.
+      - Generated game interop assemblies are not required yet because no real Harmony patches are active.
+    -->
+    <EnableBepInExIntegration>false</EnableBepInExIntegration>
+
+    <!-- Local default paths are conveniences only. Override these in build.local.props or on the command line. -->
+    <BepInExCorePath Condition="'$(BepInExCorePath)' == ''">$(MSBuildProjectDirectory)\lib\BepInEx\core\</BepInExCorePath>
+    <Il2CppInteropAssembliesPath Condition="'$(Il2CppInteropAssembliesPath)' == ''">$(MSBuildProjectDirectory)\lib\BepInEx\interop\</Il2CppInteropAssembliesPath>
+    <GameManagedPath Condition="'$(GameManagedPath)' == ''"></GameManagedPath>
+    <ThunderstoreProfilePath Condition="'$(ThunderstoreProfilePath)' == ''"></ThunderstoreProfilePath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(EnableBepInExIntegration)' == 'true'">
+    <DefineConstants>$(DefineConstants);CITYRELATIONS_BEPINEX</DefineConstants>
+  </PropertyGroup>
+
+  <!-- BepInEx core references for plugin bootstrap/config/logging. -->
+  <ItemGroup Condition="'$(EnableBepInExIntegration)' == 'true' and Exists('$(BepInExCorePath)BepInEx.Unity.IL2CPP.dll')">
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>$(BepInExCorePath)BepInEx.Unity.IL2CPP.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx.Core">
+      <HintPath>$(BepInExCorePath)BepInEx.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExCorePath)0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    Generated IL2CPP interop assemblies live separately in many BepInEx profiles.
+    They are configured here for future real patch work, but not referenced until verified targets exist.
+  -->
+  <ItemGroup Condition="'$(EnableBepInExIntegration)' == 'true' and Exists('$(Il2CppInteropAssembliesPath)Il2CppInterop.Runtime.dll')">
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>$(Il2CppInteropAssembliesPath)Il2CppInterop.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
