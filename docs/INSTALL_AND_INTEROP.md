@@ -108,3 +108,14 @@ dotnet build -p:EnableBepInExIntegration=true
 ```
 
 The BepInEx integration build validates plugin bootstrap/config references. It still does not enable real gameplay patches until verified Shadows of Doubt patch points are documented in `docs/PATCH_POINTS.md`.
+
+## Current Tooling State
+
+- Backend/API: implemented.
+- Persistence/config: implemented.
+- Lie decision logic: implemented.
+- Runnable backend harness: implemented in `DevTools/BackendHarness/`.
+- Interop metadata scanner: implemented in `DevTools/AssemblyInspector/`.
+- Real game hooks: not implemented.
+- Dialogue manipulation: not implemented.
+- Active Harmony patches: none.

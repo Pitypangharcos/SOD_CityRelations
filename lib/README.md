@@ -2,7 +2,7 @@
 
 This project targets `net6.0`, matching the current BepInEx IL2CPP ecosystem. Build with .NET SDK 6 or newer.
 
-This project expects BepInEx IL2CPP assemblies to be available at:
+This project can optionally use local BepInEx IL2CPP assemblies at:
 
 ```text
 SOD_CityRelations/lib/BepInEx/core/BepInEx.Core.dll
@@ -24,3 +24,5 @@ dotnet build .\SOD_CityRelations.csproj -p:EnableBepInExIntegration=true -p:BepI
 ```
 
 The mod intentionally does not reference Shadows of Doubt gameplay assemblies until verified IL2CPP interop assemblies are available.
+
+DLLs under `lib/BepInEx/` are local developer references only. They are ignored by git and should not be included in source zips unless a future release deliberately vendors redistributable binaries with license review.

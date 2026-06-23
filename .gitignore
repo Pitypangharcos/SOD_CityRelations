@@ -1,6 +1,30 @@
 bin/
 obj/
+.vs/
+.idea/
 *.user
 *.suo
 *.cache
+*.log
 build.local.props
+
+# Local-only BepInEx, Unity, IL2CPP, and game references. Keep docs/placeholders, not binaries.
+lib/BepInEx/**/*.dll
+**/BepInEx/interop/**/*.dll
+**/interop/**/*.dll
+**/Il2CppInterop/**/*.dll
+GameAssembly.dll
+UnityPlayer.dll
+global-metadata.dat
+Assembly-CSharp.dll
+
+# Local mod-manager/profile dumps.
+Thunderstore/
+ThunderstoreModManager/
+r2modman/
+profiles/
+*.r2z
+
+# Machine-specific generated reports.
+docs/generated/*.md
+!docs/generated/README.md

@@ -34,6 +34,11 @@
     <ThunderstoreProfilePath Condition="'$(ThunderstoreProfilePath)' == ''"></ThunderstoreProfilePath>
   </PropertyGroup>
 
+  <!-- Developer console tools live under DevTools and are built/run explicitly. -->
+  <ItemGroup>
+    <Compile Remove="DevTools\**\*.cs" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(EnableBepInExIntegration)' == 'true'">
     <DefineConstants>$(DefineConstants);CITYRELATIONS_BEPINEX</DefineConstants>
   </PropertyGroup>
