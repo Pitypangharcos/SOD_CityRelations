@@ -4,13 +4,13 @@ Inspection date: 2026-06-23
 
 ## Assembly Availability
 
-The local Steam path checked was:
+Initial local inspection checked:
 
 `C:\Program Files (x86)\Steam\steamapps\common\Shadows of Doubt`
 
-That folder contained Doorstop/.NET loader files but did not contain the Shadows of Doubt executable, `GameAssembly.dll`, `global-metadata.dat`, `Assembly-CSharp.dll`, BepInEx, or generated IL2CPP interop assemblies. A broader Steam-library search also did not find usable Shadows of Doubt game assemblies.
+That folder contained Doorstop/.NET loader files but did not contain the Shadows of Doubt executable, `GameAssembly.dll`, `global-metadata.dat`, `Assembly-CSharp.dll`, BepInEx, or generated IL2CPP interop assemblies. A broader Steam-library search also did not find usable Shadows of Doubt game assemblies at that time.
 
-Because no verified game assemblies were available, no Shadows of Doubt class or method names are listed here as patch targets. This is intentional: the MVP must not invent method names or pretend dialogue manipulation exists.
+A later real generated Shadows of Doubt IL2CPP interop scan found `Assembly-CSharp` and the diagnostic candidates listed below. These are scanner-discovered candidates and are not gameplay behavior hooks.
 
 ## MVP Patch Status
 
@@ -20,6 +20,20 @@ Because no verified game assemblies were available, no Shadows of Doubt class or
 | Question answer generation | Not verified | Not verified | Calculate lie chance before an answer | Unknown | No | Log-only decision API can be called manually |
 | Dialogue response mutation | Not verified | Not verified | Refusal, vague answers, omissions, misdirection | High | No | No dialogue mutation |
 | Witness statement generation | Not verified | Not verified | Adjust willingness to reveal sensitive details | High | No | No witness statement mutation |
+
+## First Manually Selected Diagnostic Hooks
+
+These hooks come from a real generated Shadows of Doubt IL2CPP interop scan report. They are still diagnostic-only and must not be treated as gameplay behavior hooks until tested in game.
+
+| Candidate | Scanned signature | Current use | Risk | Notes |
+| --- | --- | --- | --- | --- |
+| `DialogController.OnDialogEnd` | `Void (AISpeechPreset dialog, String dialogPresetStr, Interactable saysToInteractable, Actor saidBy, Int32 jobRef)` | First preferred read-only dialog diagnostic postfix | Medium | Logs dialog preset string, job ref, and defensive descriptions of actor/interactable arguments. No state changes. |
+| `InteractionController.SetCurrentPlayerInteraction` | `Void (InteractionKey key, Interactable newInteractable, InteractableCurrentAction newCurrentAction, Boolean fpsItem, Int32 forcePriority)` | Optional read-only interaction diagnostic postfix | Medium | Disabled unless `EnableInteractionDiagnostics=true`. Useful for locating player-to-citizen interaction flow. |
+| `Interactable.OnInteraction` | `Void (InteractionKey input, Actor who)` and `Void (InteractionAction action, Actor who, Boolean allowDelays, Single additionalDelay)` | Optional broader read-only interaction diagnostic postfixes | Medium/High | Broader hook surface. Logging only. Do not use for relationship changes yet. |
+| `SpeechController.Speak` | Found by scan | Future high-interest hook, not patched | High | Do not patch for modification. Consider read-only diagnostics only after dialog/interaction hooks are understood. |
+| `DialogController.SeenOrHeardUnusual` | Found by scan | Future lie-decision logging candidate, not patched | High | Not patched in this pass. May touch information reveal logic. |
+
+Current diagnostics are compiled only with `CITYRELATIONS_BEPINEX` and `CITYRELATIONS_SOD_INTEROP`, and runtime registration still requires `EnableHarmonyPatches=true`.
 
 ## Required Next Inspection
 
@@ -95,6 +109,8 @@ The first real patch should:
 - Register familiarity only after a safe player-to-citizen interaction hook is confirmed.
 - Stay behind config.
 - Fail safely if the target method is missing.
+
+The first implemented diagnostic layer follows this strategy: read-only postfixes, no return-value changes, no dialogue manipulation, no relationship changes, config-gated registration, and safe missing-target logging.
 
 ## Current Runtime Behavior
 

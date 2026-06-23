@@ -11,12 +11,14 @@ Version: `0.1.2`
 - Lie decision logic: implemented.
 - Runnable backend harness: implemented.
 - Interop metadata scanner: implemented.
+- Real game candidates found: yes, from generated Shadows of Doubt interop scan.
+- First guarded diagnostic patch layer: implemented behind compile and runtime opt-ins.
 - Real game hooks: not implemented yet.
 - Dialogue manipulation: not implemented yet.
 - Active Harmony patches: none.
 - Required next input from user: generated Shadows of Doubt IL2CPP interop assemblies or local paths to the game/BepInEx install where they can be inspected.
 
-Harmony gameplay patches are intentionally not active until verified Shadows of Doubt assemblies/interop types are available. The mod must not claim dialogue manipulation support until a safe conversation hook is found and tested.
+Harmony diagnostics are not active by default. Build with `EnableBepInExIntegration=true` and `EnableSodInteropIntegration=true`, then enable config options such as `EnableHarmonyPatches` and `EnableDialogDiagnostics` to register read-only diagnostics. The mod must not claim dialogue manipulation support until a safe conversation hook is found and tested.
 
 See `docs/INSTALL_AND_INTEROP.md` for the local files and paths needed for real patch-point inspection.
 See `docs/PACKAGING.md` for source and release packaging rules.
@@ -39,6 +41,12 @@ BepInEx integration build with explicit paths:
 
 ```powershell
 dotnet build -p:EnableBepInExIntegration=true -p:BepInExCorePath="C:\Path\To\BepInEx\core\" -p:Il2CppInteropAssembliesPath="C:\Path\To\BepInEx\interop\"
+```
+
+Read-only SoD diagnostics compile mode:
+
+```powershell
+dotnet build -p:EnableBepInExIntegration=true -p:EnableSodInteropIntegration=true
 ```
 
 Copy `build.local.props.example` to `build.local.props` for machine-local path overrides. `build.local.props` is ignored by git.

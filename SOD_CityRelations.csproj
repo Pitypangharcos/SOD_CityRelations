@@ -23,9 +23,11 @@
       Game-integrated build:
       - Pass -p:EnableBepInExIntegration=true.
       - Requires BepInEx IL2CPP core references.
-      - Generated game interop assemblies are not required yet because no real Harmony patches are active.
+      - Pass -p:EnableSodInteropIntegration=true to compile guarded real-game diagnostic patches.
+      - Diagnostic patches are still disabled at runtime unless EnableHarmonyPatches is true.
     -->
     <EnableBepInExIntegration>false</EnableBepInExIntegration>
+    <EnableSodInteropIntegration>false</EnableSodInteropIntegration>
 
     <!-- Local default paths are conveniences only. Override these in build.local.props or on the command line. -->
     <BepInExCorePath Condition="'$(BepInExCorePath)' == ''">$(MSBuildProjectDirectory)\lib\BepInEx\core\</BepInExCorePath>
@@ -41,6 +43,10 @@
 
   <PropertyGroup Condition="'$(EnableBepInExIntegration)' == 'true'">
     <DefineConstants>$(DefineConstants);CITYRELATIONS_BEPINEX</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(EnableBepInExIntegration)' == 'true' and '$(EnableSodInteropIntegration)' == 'true'">
+    <DefineConstants>$(DefineConstants);CITYRELATIONS_SOD_INTEROP</DefineConstants>
   </PropertyGroup>
 
   <!-- BepInEx core references for plugin bootstrap/config/logging. -->

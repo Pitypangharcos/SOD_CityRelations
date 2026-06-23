@@ -41,6 +41,12 @@ public sealed class Plugin
             EnableLieSystem = Config.Bind("General", "EnableLieSystem", true, "Enable lie chance decisions.").Value,
             EnableDialogueManipulation = Config.Bind("General", "EnableDialogueManipulation", false, "Allow verified patches to alter dialogue. Disabled for MVP unless a safe hook is implemented.").Value,
             ProtectCriticalInfo = Config.Bind("General", "ProtectCriticalInfo", true, "Avoid corrupting case-critical answers unless a safe alternate-route check exists.").Value,
+            EnableHarmonyPatches = Config.Bind("Diagnostics", "EnableHarmonyPatches", false, "Enable guarded Harmony diagnostics. No patches are registered unless this is true.").Value,
+            EnableDialogDiagnostics = Config.Bind("Diagnostics", "EnableDialogDiagnostics", false, "Log read-only dialog diagnostics for verified targets.").Value,
+            EnableInteractionDiagnostics = Config.Bind("Diagnostics", "EnableInteractionDiagnostics", false, "Log read-only interaction diagnostics for verified targets.").Value,
+            EnableSpeechDiagnostics = Config.Bind("Diagnostics", "EnableSpeechDiagnostics", false, "Reserved for future read-only speech diagnostics. No speech patch is active in this version.").Value,
+            EnableFamiliarityFromDialogEnd = Config.Bind("Diagnostics", "EnableFamiliarityFromDialogEnd", false, "Reserved for future familiarity registration from dialog end. No relationship changes are made by diagnostics in this version.").Value,
+            MaxDiagnosticsPerMinute = Config.Bind("Diagnostics", "MaxDiagnosticsPerMinute", 60, "Maximum diagnostic log entries per minute across diagnostic patches.").Value,
 
             FamiliarityGainPerConversation = Config.Bind("Relationship", "FamiliarityGainPerConversation", 1, "Familiarity gained when a safe conversation interaction is observed.").Value,
             TrustGainWhenHelpful = Config.Bind("Relationship", "TrustGainWhenHelpful", 5, "Trust gained for helpful player actions.").Value,
@@ -87,7 +93,7 @@ public sealed class Plugin
             CityRelationsAPI.Initialize(Service);
         }
 
-        PatchRegistration.Register(logger);
+        PatchRegistration.Register(config, Service, logger);
         logger.Info("SOD_CityRelations backend initialized.");
     }
 }

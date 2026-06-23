@@ -10,6 +10,12 @@ public sealed class CityRelationsConfig
     public bool EnableLieSystem { get; set; } = true;
     public bool EnableDialogueManipulation { get; set; }
     public bool ProtectCriticalInfo { get; set; } = true;
+    public bool EnableHarmonyPatches { get; set; }
+    public bool EnableDialogDiagnostics { get; set; }
+    public bool EnableInteractionDiagnostics { get; set; }
+    public bool EnableSpeechDiagnostics { get; set; }
+    public bool EnableFamiliarityFromDialogEnd { get; set; }
+    public int MaxDiagnosticsPerMinute { get; set; } = 60;
 
     public int FamiliarityGainPerConversation { get; set; } = 1;
     public int TrustGainWhenHelpful { get; set; } = 5;
