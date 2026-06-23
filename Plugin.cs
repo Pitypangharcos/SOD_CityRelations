@@ -19,7 +19,7 @@ public sealed class Plugin
 {
     public const string PluginGuid = "pitypang.sod.cityrelations";
     public const string PluginName = "SOD_CityRelations";
-    public const string PluginVersion = "0.1.1";
+    public const string PluginVersion = "0.1.2";
 
     public static CityRelationsService? Service { get; private set; }
 

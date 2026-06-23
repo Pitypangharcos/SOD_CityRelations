@@ -2,7 +2,7 @@
 
 `SOD_CityRelations` is a Shadows of Doubt BepInEx 6 IL2CPP mod backend for persistent citizen-to-player relationships.
 
-Version: `0.1.1`
+Version: `0.1.2`
 
 ## Current Status
 
@@ -59,6 +59,12 @@ dotnet run --project DevTools/BackendHarness/BackendHarness.csproj
 dotnet run --project DevTools/AssemblyInspector/AssemblyInspector.csproj -- "C:\Path\To\BepInEx\interop\"
 ```
 
+Thunderstore/r2modman-style profile example:
+
+```powershell
+dotnet run --project DevTools/AssemblyInspector/AssemblyInspector.csproj -- "C:\Path\To\r2modmanPlus-local\ShadowsOfDoubt\profiles\<profile>\BepInEx\interop"
+```
+
 Optional arguments:
 
 ```powershell
@@ -66,3 +72,15 @@ dotnet run --project DevTools/AssemblyInspector/AssemblyInspector.csproj -- "C:\
 ```
 
 The generated report is machine-specific and ignored by git. It does not add patches, manipulate dialogue, or prove a hook is safe by itself.
+
+The folder must contain generated Shadows of Doubt gameplay interop assemblies. A folder with only Unity/BepInEx/runtime support assemblies is useful for testing the scanner, but not for selecting gameplay patch points.
+
+## Packaging
+
+Do not create source zips by compressing the whole working directory. Use the exclusion-based package script:
+
+```powershell
+./tools/package-source.ps1
+```
+
+See `docs/PACKAGING.md` for release package guidance and forbidden files.

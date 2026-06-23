@@ -104,4 +104,4 @@ The first real patch should:
 
 `DevTools/AssemblyInspector/` can scan metadata from DLL files in a provided interop folder and write `docs/generated/INTEROP_SCAN_REPORT.md`. The output is discovery-only and still requires manual confirmation before any Harmony patch is added.
 
-No active Harmony patch is registered in version `0.1.1`.
+No active Harmony patch is registered in version `0.1.2`.

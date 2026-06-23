@@ -1,12 +1,17 @@
 bin/
 obj/
+.agents/
 .vs/
 .idea/
 *.user
 *.suo
 *.cache
 *.log
+*.pdb
+*.deps.json
+*.runtimeconfig.json
 build.local.props
+artifacts/
 
 # Local-only BepInEx, Unity, IL2CPP, and game references. Keep docs/placeholders, not binaries.
 lib/BepInEx/**/*.dll

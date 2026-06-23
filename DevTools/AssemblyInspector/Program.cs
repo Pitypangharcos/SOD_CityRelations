@@ -188,6 +188,12 @@ internal sealed class MetadataScanner
                 var reader = peReader.GetMetadataReader();
                 var assemblyName = GetAssemblyName(reader, dllPath);
                 var likelyGameAssembly = IsLikelyGameAssembly(assemblyName);
+                result.AssemblyNames.Add(assemblyName);
+                if (likelyGameAssembly)
+                {
+                    result.LikelyGameAssemblies.Add(assemblyName);
+                }
+
                 var typeProvider = new MetadataSignatureProvider(reader);
 
                 foreach (var typeHandle in reader.TypeDefinitions)
@@ -240,6 +246,12 @@ internal sealed class MetadataScanner
             {
                 result.Errors.Add($"Failed to scan {dllPath}: {ex.Message}");
             }
+        }
+
+        if (result.LikelyGameAssemblies.Count == 0)
+        {
+            result.Warnings.Add("This looks like support/runtime interop, not generated Shadows of Doubt gameplay interop.");
+            result.Warnings.Add("No gameplay patch points should be selected from this report.");
         }
 
         result.Candidates = result.Candidates
@@ -384,7 +396,13 @@ internal sealed class MetadataScanner
 
     private static bool IsLikelySystemAssembly(string assemblyName)
     {
-        var prefixes = new[] { "System", "Microsoft", "Unity", "UnityEngine", "Il2Cpp", "BepInEx", "Harmony", "Mono", "netstandard", "mscorlib" };
+        if (assemblyName.Equals("netstandard", StringComparison.OrdinalIgnoreCase) ||
+            assemblyName.Equals("mscorlib", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        var prefixes = new[] { "System", "Microsoft", "Unity", "UnityEngine", "Il2Cpp", "BepInEx", "Harmony", "Mono" };
         return prefixes.Any(prefix => assemblyName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
     }
 
@@ -462,6 +480,8 @@ internal sealed class ScanResult
     public int AssembliesScanned { get; set; }
     public int TypesScanned { get; set; }
     public int MembersScanned { get; set; }
+    public SortedSet<string> AssemblyNames { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public SortedSet<string> LikelyGameAssemblies { get; } = new(StringComparer.OrdinalIgnoreCase);
     public List<Candidate> Candidates { get; set; } = new();
     public List<string> Warnings { get; } = new();
     public List<string> Errors { get; } = new();
@@ -546,6 +566,22 @@ internal static class ReportWriter
         yield return $"- Include low confidence: `{options.IncludeLowConfidence}`";
         yield return string.Empty;
         yield return "This report is discovery-only. It does not create Harmony patches, mutate dialogue, or confirm that any candidate is safe to patch.";
+        yield return string.Empty;
+
+        yield return "## Likely Game Assemblies";
+        yield return string.Empty;
+        if (result.LikelyGameAssemblies.Count == 0)
+        {
+            yield return "None detected. This scan appears to contain only support/runtime assemblies.";
+        }
+        else
+        {
+            foreach (var assemblyName in result.LikelyGameAssemblies)
+            {
+                yield return $"- `{assemblyName}`";
+            }
+        }
+
         yield return string.Empty;
 
         yield return "## Warnings And Errors";

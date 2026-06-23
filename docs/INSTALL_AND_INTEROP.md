@@ -93,6 +93,22 @@ You can also pass paths directly:
 dotnet build -p:EnableBepInExIntegration=true -p:BepInExCorePath="C:\Path\To\BepInEx\core\" -p:Il2CppInteropAssembliesPath="C:\Path\To\BepInEx\interop\"
 ```
 
+## Scanner Examples
+
+Steam/manual BepInEx-style interop folder:
+
+```powershell
+dotnet run --project DevTools/AssemblyInspector/AssemblyInspector.csproj -- "C:\Path\To\BepInEx\interop"
+```
+
+Thunderstore/r2modman-style profile interop folder:
+
+```powershell
+dotnet run --project DevTools/AssemblyInspector/AssemblyInspector.csproj -- "C:\Path\To\r2modmanPlus-local\ShadowsOfDoubt\profiles\<profile>\BepInEx\interop"
+```
+
+The folder must contain generated Shadows of Doubt gameplay interop assemblies, not only Unity/BepInEx/runtime support assemblies. If the scanner reports support-only interop, do not select gameplay patch points from that report.
+
 ## Build Modes
 
 Backend-only build:
